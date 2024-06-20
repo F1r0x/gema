@@ -23,19 +23,30 @@
             max-width: 600px;
             width: 100%;
         }
-        #question {
-            font-size: 20px;
+        .question-container {
             margin-bottom: 30px;
+        }
+        .question-image {
+            max-width: 50%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
         #input {
             width: calc(100% - 40px);
             max-width: 400px;
             padding: 12px;
-            margin-bottom: 20px;
+            margin: 20px auto 10px auto; /* Añadido margen arriba y abajo, y centrado horizontal */
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
             box-sizing: border-box;
+            display: block;
         }
         #submit {
             padding: 12px 20px;
@@ -46,6 +57,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
+            margin-top: 10px; /* Añadido margen arriba */
         }
         #submit:hover {
             background-color: #218838;
@@ -73,26 +85,30 @@
             max-width: 100%;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none; /* Inicialmente ocultar la imagen del regalo */
         }
     </style>
 </head>
 <body>
     <div id="quiz-container">
-        <div id="question">Hola cariño, vamos a jugar un juego. <br> Para empezar, escribe tu nombre...</div>
-        <input type="text" id="input" placeholder="Escribe tu respuesta aquí">
+        <div class="question-container">
+            <img class="question-image" src="img/foto1.jpg" alt="Imagen para la pregunta 1">
+            <div class="question-text">Escribe tu nombre:</div>
+            <input type="text" id="input" placeholder="Escribe tu respuesta aquí">
+        </div>
         <button id="submit">Enviar</button>
         <div id="message"></div>
         <div id="result">¡Enhorabuena bombón! Has completado todas las preguntas.</div>
         <div id="gift">
             <p>¡Sorpresa! Aquí tienes tu regalo:</p>
-            <img id="gift-image" src="" alt="Regalo sorpresa">
+            <img id="gift-image" src="img/regalo.jpg" alt="Regalo sorpresa">
         </div>
     </div>
 
     <script>
         const questions = [
             { 
-                question: "Hola bombón. Escribe tu nombre: ",
+                question: "Feliz Cumpleaños bombón!!!<br><br> Espero que disfrutes de tu día ya que tú me alegras el mio.  <br><br>En su día tú me hiciste una mini escape room y hoy te tocará a ti superar algunos acertijos, para empezar el juego escribe tu nombre. ",
                 answer: "Gema",
                 image: "img/foto1.jpg"
             },
@@ -112,16 +128,19 @@
                 image: "img/foto4.jpg"
             },
             { 
-                question: "Rodeada de agua y envuelta en misterio, fue hogar de hombres de oscuro criterio. <br> Inaccesible y fría, su fama creció, como una fortaleza que nadie escapó. <br> Su nombre es de un ave que allí anida, y su sombra en la bahía siempre se divisa.",
+                question: "Rodeada de agua y envuelta en misterio,<br> fue hogar de hombres de oscuro criterio. <br> Inaccesible y fría, su fama creció,<br> como una fortaleza que nadie escapó. <br> Su nombre es de un ave que allí anida,<br> y su sombra en la bahía siempre se divisa.",
                 answer: "Alcatraz",
                 image: "img/foto5.jpg"
+            },
+            { 
+                question: "Enhorabuena bombón!!! Con ganas de pasar muchas más aventuras contigo.",
+                image: "img/regalo.jpg"
             }
         ];
 
         let currentQuestion = 0;
 
         const quizContainer = document.getElementById('quiz-container');
-        const questionElement = document.getElementById('question');
         const inputElement = document.getElementById('input');
         const submitButton = document.getElementById('submit');
         const messageElement = document.getElementById('message');
@@ -133,6 +152,7 @@
             const userAnswer = inputElement.value.trim();
             if (userAnswer.toLowerCase() === questions[currentQuestion].answer.toLowerCase()) {
                 currentQuestion++;
+                messageElement.textContent = ''; // Limpiar el mensaje de error
                 if (currentQuestion < questions.length) {
                     showQuestion(currentQuestion);
                 } else {
@@ -144,21 +164,36 @@
         });
 
         function showQuestion(index) {
-            questionElement.innerHTML = questions[index].question;
-            giftElement.style.display = 'none';
-            giftImageElement.src = questions[index].image;
-            inputElement.value = '';
-            messageElement.textContent = '';
+            const questionContainer = document.createElement('div');
+            questionContainer.classList.add('question-container');
+            const questionImage = document.createElement('img');
+            questionImage.classList.add('question-image');
+            questionImage.src = questions[index].image;
+            questionImage.alt = `Imagen para la pregunta ${index + 1}`;
+            const questionText = document.createElement('div');
+            questionText.classList.add('question-text');
+            questionText.innerHTML = questions[index].question;
+            questionContainer.appendChild(questionImage);
+            questionContainer.appendChild(questionText);
+
+            quizContainer.innerHTML = ''; // Limpiar el contenedor de preguntas
+            quizContainer.appendChild(questionContainer);
+            quizContainer.appendChild(inputElement);
+            quizContainer.appendChild(submitButton);
+            quizContainer.appendChild(messageElement);
         }
 
         function showResult() {
-            questionElement.style.display = 'none';
+            // Ocultar elementos no necesarios
             inputElement.style.display = 'none';
             submitButton.style.display = 'none';
+            messageElement.style.display = 'none';
+
+            // Mostrar mensaje de resultado y regalo sorpresa
             resultElement.style.display = 'block';
             giftElement.style.display = 'block';
-            giftImageElement.src = questions[currentQuestion - 1].image;
-            quizContainer.style.justifyContent = 'center';
+            giftImageElement.style.display = 'block';
+            giftImageElement.src = "img/regalo.jpg";
         }
 
         // Mostrar la primera pregunta al cargar la página
