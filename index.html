@@ -85,17 +85,28 @@
         <div id="result">¡Enhorabuena bombón! Has completado todas las preguntas.</div>
         <div id="gift">
             <p>¡Sorpresa! Aquí tienes tu regalo:</p>
-            <img src="ruta/a/tu/imagen.jpg" alt="Regalo sorpresa">
+            <img id="gift-image" src="" alt="Regalo sorpresa">
         </div>
     </div>
 
     <script>
         const questions = [
-            { question: "Escribe tu nombre: ", answer: "Gema" },
-            { question: "Aunque no lo puedes ver, se siente en el corazón. Es la fuerza que nos mueve y da vida a la pasión.", answer: "Amor" },
-            { question: "Con un corazón tierno por dentro, y una coraza dulce por fuera, en ocasiones especiales me entregan, y con un mordisco me desvelan.", answer: "Bombón" },
-            { question: "En el espejo te puedes ver, con una sonrisa me haces florecer, eres quien ilumina mi día y en mi corazón siempre brilla.", answer: "Yo" },
-            { question: "Rodeada de agua y envuelta en misterio, fue hogar de hombres de oscuro criterio. Inaccesible y fría, su fama creció, como una fortaleza que nadie escapó. Su nombre es de un ave que allí anida, y su sombra en la bahía siempre se divisa.", answer: "Alcatraz" }
+            { 
+                question: "Escribe tu nombre: ",
+                answer: "Gema",
+                image: "/img/Foto1.jpg"
+            },
+            { 
+                question: "Aunque no lo puedes ver,<br> se siente en el corazón. <br> Es la fuerza que nos mueve<br> y da vida a la pasión.",
+                answer: "Amor",
+                image: "ruta/a/tu/imagen2.jpg"
+            },
+            { 
+                question: "Con un corazón tierno por dentro, y una coraza dulce por fuera, <br> en ocasiones especiales me entregan, y con un mordisco me desvelan.",
+                answer: "Bombón",
+                image: "ruta/a/tu/imagen3.jpg"
+            },
+            // Puedes agregar más preguntas de la misma manera
         ];
 
         let currentQuestion = 0;
@@ -107,27 +118,42 @@
         const messageElement = document.getElementById('message');
         const resultElement = document.getElementById('result');
         const giftElement = document.getElementById('gift');
+        const giftImageElement = document.getElementById('gift-image');
 
         submitButton.addEventListener('click', () => {
             const userAnswer = inputElement.value.trim();
             if (userAnswer.toLowerCase() === questions[currentQuestion].answer.toLowerCase()) {
                 currentQuestion++;
                 if (currentQuestion < questions.length) {
-                    questionElement.innerHTML = questions[currentQuestion].question;
-                    inputElement.value = '';
-                    messageElement.textContent = '';
+                    showQuestion(currentQuestion);
                 } else {
-                    questionElement.style.display = 'none';
-                    inputElement.style.display = 'none';
-                    submitButton.style.display = 'none';
-                    resultElement.style.display = 'block';
-                    giftElement.style.display = 'block';
-                    quizContainer.style.justifyContent = 'center';
+                    showResult();
                 }
             } else {
-                messageElement.textContent = 'Has fallado bb, intentalo de nuevo, y recuerda que las palabras empiezan con mayúscula.';
+                messageElement.textContent = 'Respuesta incorrecta. Inténtalo de nuevo.';
             }
         });
+
+        function showQuestion(index) {
+            questionElement.innerHTML = questions[index].question;
+            giftElement.style.display = 'none';
+            giftImageElement.src = questions[index].image;
+            inputElement.value = '';
+            messageElement.textContent = '';
+        }
+
+        function showResult() {
+            questionElement.style.display = 'none';
+            inputElement.style.display = 'none';
+            submitButton.style.display = 'none';
+            resultElement.style.display = 'block';
+            giftElement.style.display = 'block';
+            giftImageElement.src = questions[currentQuestion - 1].image;
+            quizContainer.style.justifyContent = 'center';
+        }
+
+        // Mostrar la primera pregunta al cargar la página
+        showQuestion(currentQuestion);
     </script>
 </body>
 </html>
