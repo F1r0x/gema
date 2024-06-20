@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Sorpresa</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+        }
+        #quiz-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        #question {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+        #input {
+            width: calc(100% - 40px);
+            max-width: 400px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        #submit {
+            padding: 12px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        #submit:hover {
+            background-color: #218838;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #dc3545;
+        }
+        #result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 18px;
+        }
+        #gift {
+            display: none;
+            margin-top: 20px;
+        }
+        #gift img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="question">Hola cariño, vamos a jugar un juego. <br> Para empezar, escribe tu nombre...</div>
+        <input type="text" id="input" placeholder="Escribe tu respuesta aquí">
+        <button id="submit">Enviar</button>
+        <div id="message"></div>
+        <div id="result">¡Enhorabuena bombón! Has completado todas las preguntas.</div>
+        <div id="gift">
+            <p>¡Sorpresa! Aquí tienes tu regalo:</p>
+            <img src="ruta/a/tu/imagen.jpg" alt="Regalo sorpresa">
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "Escribe tu nombre: ", answer: "Gema" },
+            { question: "Aunque no lo puedes ver, se siente en el corazón. Es la fuerza que nos mueve y da vida a la pasión.", answer: "Amor" },
+            { question: "Con un corazón tierno por dentro, y una coraza dulce por fuera, en ocasiones especiales me entregan, y con un mordisco me desvelan.", answer: "Bombón" },
+            { question: "En el espejo te puedes ver, con una sonrisa me haces florecer, eres quien ilumina mi día y en mi corazón siempre brilla.", answer: "Yo" },
+            { question: "Rodeada de agua y envuelta en misterio, fue hogar de hombres de oscuro criterio. Inaccesible y fría, su fama creció, como una fortaleza que nadie escapó. Su nombre es de un ave que allí anida, y su sombra en la bahía siempre se divisa.", answer: "Alcatraz" }
+        ];
+
+        let currentQuestion = 0;
+
+        const quizContainer = document.getElementById('quiz-container');
+        const questionElement = document.getElementById('question');
+        const inputElement = document.getElementById('input');
+        const submitButton = document.getElementById('submit');
+        const messageElement = document.getElementById('message');
+        const resultElement = document.getElementById('result');
+        const giftElement = document.getElementById('gift');
+
+        submitButton.addEventListener('click', () => {
+            const userAnswer = inputElement.value.trim();
+            if (userAnswer.toLowerCase() === questions[currentQuestion].answer.toLowerCase()) {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    questionElement.innerHTML = questions[currentQuestion].question;
+                    inputElement.value = '';
+                    messageElement.textContent = '';
+                } else {
+                    questionElement.style.display = 'none';
+                    inputElement.style.display = 'none';
+                    submitButton.style.display = 'none';
+                    resultElement.style.display = 'block';
+                    giftElement.style.display = 'block';
+                    quizContainer.style.justifyContent = 'center';
+                }
+            } else {
+                messageElement.textContent = 'Has fallado bb, intentalo de nuevo, y recuerda que las palabras empiezan con mayúscula.';
+            }
+        });
+    </script>
+</body>
+</html>
